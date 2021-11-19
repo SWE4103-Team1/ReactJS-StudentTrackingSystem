@@ -3,7 +3,6 @@
 This repo holds the react project that we are using within our DJango Project.
 
 **Steps to run development server:**<br/>
-<br/>
 1.) https://nodejs.org/en/download/   Download Node.js to get the node package manager.<br/>
 2.) clone repo<br/>
 3.) type "npm install" into terminal to install all the dependancies<br/>
