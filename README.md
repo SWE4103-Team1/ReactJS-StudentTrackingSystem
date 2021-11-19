@@ -14,5 +14,5 @@ This repo holds the react project that we are using within our DJango Project.
 2.) delete old static folder from \SWE-transcript-counts\StudentTrackingSystem\StudentTrackingSystemApp\static\build_table\build-table\static <br/>
 3.) copy static folder from the build folder and paste it into SWE-transcript-counts\StudentTrackingSystem\StudentTrackingSystemApp\static\build_table\build-table <br/>
 4.) change the templates\StudentTrackingSystemApp\Dashboard\index.html <br/>
-	a.)copy all the js from inside the script tags from the index.html file from the npm build folder <br/>
-	b.) change the names of the referenced js and css files in templates\StudentTrackingSystemApp\Dashboard\index.html <br/>
+	&nbsp;a.)copy all the js from inside the script tags from the index.html file from the npm build folder <br/>
+	&nbsp;b.) change the names of the referenced js and css files in templates\StudentTrackingSystemApp\Dashboard\index.html <br/>
