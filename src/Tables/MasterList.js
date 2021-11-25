@@ -8,10 +8,14 @@ import {
 	useFilters,
 	useGlobalFilter,
 	useSortBy,
+	useRowSelect,
 	useAsyncDebounce,
 } from "react-table";
 import React from "react";
 
+import {
+	CheckBox
+} from '../checkBox'
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
@@ -22,23 +26,52 @@ export function TableMasterList({
 	modalOpen,
 	modalState,
 	selectKey,
-	selectName,
+	selectRow,
 }) {
-	function enterAdvanced(row) {
-		const key = row.cells.map((cell) => {
-			if (cell.column.id === "student_number") {
-				return cell.value;
-			}
-		});
-		const name = row.cells.map((cell) => {
-			if (cell.column.id === "name") {
-				return cell.value;
-			}
-		});
-		modalOpen();
-		selectName(name);
-		selectKey(key);
-		console.log(key);
+	function enterAdvanced(row, cell) {
+		if(cell.column.id !== "selection"){
+			const key = row.cells.map((cell) => {
+				if (cell.column.id === "student_number") {
+					return cell.value;
+				}
+			});
+			const name = row.cells.map((cell) => {
+				if (cell.column.id === "name") {
+					return cell.value;
+				}
+			});
+			const rank = row.cells.map((cell) => {
+				if (cell.column.id === "rank") {
+					return cell.value;
+				}
+			});
+			const program = row.cells.map((cell) => {
+				if (cell.column.id === "program") {
+					return cell.value;
+				}
+			});
+			const status = row.cells.map((cell) => {
+				if (cell.column.id === "status") {
+					return cell.value;
+				}
+			});
+			const campus = row.cells.map((cell) => {
+				if (cell.column.id === "campus") {
+					return cell.value;
+				}
+			});
+			modalOpen();
+			selectRow({
+				name: name,
+				program: program,
+				campus: campus,
+				rank: rank,
+				status: status,
+			});
+			selectKey(key);
+			console.log(key);
+		}
+		
 	}
 	const filterTypes = React.useMemo(
 		() => ({
@@ -75,6 +108,7 @@ export function TableMasterList({
 		rows,
 		prepareRow,
 		state,
+		selectedFlatRows,
 		visibleColumns,
 	} = useTable(
 		{
@@ -85,8 +119,27 @@ export function TableMasterList({
 		},
 		useFilters, // useFilters!
 		useGlobalFilter,
-		useSortBy // useGlobalFilter!
-	);
+		useSortBy,
+		useRowSelect,
+		(hooks) => {
+			hooks.visibleColumns.push((columns) => {
+				return [
+					{
+						id: "selection",
+						Header: ({ getToggleAllRowsSelectedProps }) => (
+							<div><CheckBox {...getToggleAllRowsSelectedProps()} /></div>
+							
+						),
+						Cell: ({ row }) => (
+							<CheckBox {...row.getToggleRowSelectedProps()} />
+						),
+					},
+					...columns,
+				];
+			});
+		}
+		);// useGlobalFilter!
+
 
 	// We don't want to render all of the rows for this example, so cap
 	// it for this use case
@@ -126,11 +179,11 @@ export function TableMasterList({
 						return (
 							<tr
 								className='List_Row'
-								onClick={() => enterAdvanced(row)}
+								
 								{...row.getRowProps()}>
 								{row.cells.map((cell) => {
 									return (
-										<td className='table-td-cell' {...cell.getCellProps()}>
+										<td onClick={() => enterAdvanced(row, cell)} className='table-td-cell' {...cell.getCellProps()}>
 											{cell.render("Cell")}
 										</td>
 									);
@@ -140,6 +193,17 @@ export function TableMasterList({
 					})}
 				</tbody>
 			</table>
+			<pre>
+								<code>
+									{JSON.stringify(
+										{
+											selectedFlatRows: selectedFlatRows.map((row) => row.original),
+										},
+										null,
+										2
+									)}  
+								</code>
+							</pre>
 			<br />
 		</>
 	);
