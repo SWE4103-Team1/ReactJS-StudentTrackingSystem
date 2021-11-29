@@ -72,85 +72,100 @@ export  async function makeData(setData) {
         // console.log(response
         //   );
        let data = {
-        audit : {
-        target_student: {
-          student_number: 8510804,
-          full_name: "Fred Lampard",
-          cohort:" 2018-2019FR",
-          rank: "JUN",
-          years_in: 2,
-          status: "IN PROGRESS"
-        },
-        base_program: "SWE2018",
-        audit_date: "", 
-        progress: {
-          CORE: {
-            completed: {
-              courses: ["MATH103", "ENGG1001"], 
-              credit_hours: 76
-            },
-            in_progress: {
-              courses: ["CE3963", "CS2263"],
-              credit_hours: 7
-            },
-            remaining: {
-              courses: ["CS3503", "CS3383", "CS3413", "CS3873", "ECE3221"], 
-              credit_hours: 12
-            }
-          },
-          TE: {
-            completed: {
-              courses: [],
-              credit_hours: 0
-            },
-            in_progress: {
-              courses: [],
-              credit_hours: 0
-            },
-            remaining: {
-              num_courses: 2,
-              credit_hours: 12
-            }
-          },
-          NS: {
-            completed: {
-              courses: [],
-              credit_hours: 0
-            },
-            in_progress: {
-              courses: [],
-              credit_hours: 0
-            },
-            remaining: {
-              num_courses: 2,
-              credit_hours: 6
-            }
-          },
-          CSE: {
-            credit_hours: 9,
-            completed: {
-              ITS: {
-                course: "SOCI3373",
-                credit_hours: 3
-              }
-            },
-            in_progress: {
-              OPEN: {
-                course: "ENGL1103",
-                credit_hours: 3
-              }
-            },
-            remaining: {
-              HSS: {
-                credit_hours: 0
-              }
-            }
-          }
-        },
-        extra_courses: "" 
-      }
-      
-      }
+					audit: {
+						target_student: {
+							student_number: 5283043,
+							full_name: "Darlene Hooper",
+							cohort: "UNPOPULATED",
+							rank: "FIR",
+							years_in: 0.8,
+							status: "IN PROGRESS",
+						},
+						progress: {
+							CORE: {
+								remaining: {
+									courses: [
+										"SWE4040",
+										"CS3383",
+										"CS3873",
+										"ECE2412",
+										"SWE4203",
+										"ECE3242",
+										"ENGG4013",
+									],
+									credit_hours: 9,
+								},
+								completed: {
+									courses: [
+										"CS1073",
+										"MATH1003",
+										"MATH1503",
+										"ENGG1001",
+										"PHYS1081",
+										"ENGG1015",
+										"ENGG1003",
+										"ECE2701",
+										"CS2043",
+										"CS1303",
+										"ECE2214",
+										"STAT2593",
+										"ECE2215",
+										"CHEM1982",
+										"MATH1013",
+										"CS1003",
+										"ECE1813",
+										"CHEM1987",
+										"CS1083",
+										"CS2383",
+										"SWE4103",
+										"ECE3221",
+										"CS2333",
+										"INFO1103",
+										"CS2263",
+										"CE3963",
+										"CS3413",
+										"CS2413",
+										"ECE2021",
+										"ECE3232",
+										"ECE4242",
+										"CS3503",
+										"SWE4403",
+									],
+									credit_hours: 113,
+								},
+								in_progress: { courses: [], credit_hours: 0 },
+							},
+							TE: {
+								remaining: { num_courses: 2, credit_hours: 8 },
+								completed: { courses: ["CS3113", "CS3035"], credit_hours: 6 },
+								in_progress: { courses: [], credit_hours: 0 },
+							},
+							NS: {
+								remaining: { num_courses: 2, credit_hours: 8 },
+								completed: { courses: ["CS3113", "CS3035"], credit_hours: 6 },
+								in_progress: { courses: [], credit_hours: 0 },
+							},
+
+							CSE_HSS: {
+								remaining: { num_courses: 2, credit_hours: 8 },
+								completed: { courses: ["CS3113", "CS3035"], credit_hours: 6 },
+								in_progress: { courses: [], credit_hours: 0 },
+							},
+							CSE_OPEN: {
+								remaining: { num_courses: 2, credit_hours: 8 },
+								completed: { courses: ["CS3113", "CS3035"], credit_hours: 6 },
+								in_progress: { courses: [], credit_hours: 0 },
+							},
+							CSE_ITS: {
+								remaining: { num_courses: 2, credit_hours: 8 },
+								completed: { courses: ["CS3113", "CS3035"], credit_hours: 6 },
+								in_progress: { courses: [], credit_hours: 0 },
+							},
+						},
+						latest_enrolment_term: "2017/FA",
+						base_program: "SWE2017-18",
+					},
+				};
         
         console.log(data);
         return setData(data);
