@@ -3,13 +3,59 @@ import { matchSorter } from "match-sorter";
 export function compareCourseCode(rowA, rowB, id, desc) {
 	let arr_A = rowA.values[id];
 	arr_A = arr_A.split("*");
-	console.log(arr_A);
+	
 	let arr_B = rowB.values[id];
 
 	arr_B = arr_B.split("*");
-	console.log(arr_B);
+	
 	let a = Number.parseFloat(arr_A[1]);
 	let b = Number.parseFloat(arr_B[1]);
+	if (Number.isNaN(a)) {
+		// Blanks and non-numeric strings to bottom
+		a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+	}
+	if (Number.isNaN(b)) {
+		b = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;
+	}
+	if (a > b) return 1;
+	if (a < b) return -1;
+	return 0;
+}
+
+
+export function compareRank(rowA, rowB, id, desc) {
+	let arr_A = rowA.values[id];
+	
+
+	let arr_B = rowB.values[id];
+
+	
+	
+	
+	let a = 0
+	let b = 0
+
+	if(arr_A === "JUN"){
+		a = 1
+	}else if(arr_A === "SOP"){
+		a = 2
+	}
+	else if(arr_A === "SEN"){
+		a = 3
+	}
+
+	if(arr_B === "JUN"){
+		b = 1
+
+	}else if(arr_B === "SOP"){
+		b = 2
+
+	}
+	else if(arr_B === "SEN"){
+		b = 3;
+		
+	}
+	
 	if (Number.isNaN(a)) {
 		// Blanks and non-numeric strings to bottom
 		a = desc ? Number.NEGATIVE_INFINITY : Number.POSITIVE_INFINITY;

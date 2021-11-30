@@ -4,7 +4,7 @@ import React from 'react'
 import { AuditCSE } from "./AuditCSE";
 
 export const Audit = ({ data }) => {
-	console.log(data);
+	
 
 	const styles = {
 		CourseCode: {
@@ -15,166 +15,171 @@ export const Audit = ({ data }) => {
 		},
 		div_style: {
 			boxShadow: "1px 3px 1px #9E9E9E",
+            
 		},
 		CourseHeaders: {
 			font: "sans-serif",
 			fontSize: "20px",
+            paddingBottom: "15px",
+            paddingTop: "15px"
 		},
 		Parent_Div: {
-			width: "650px",
+		
 		},
 	};
 
+
+    let progress = data.progress
+   
 	return (
 		<div style={styles.Parent_Div}>
 			<div>
 				<p>
-					Audit: {data.audit.target_student.student_number}, &nbsp;
-					{data.audit.target_student.cohort},&nbsp;{" "}
-					{data.audit.target_student.rank}, &nbsp;years in:{" "}
-					{data.audit.target_student.years_in}
+					Audit: {data.target_student.student_number}, &nbsp;
+					{data.target_student.cohort},&nbsp;{" "}
+					{data.target_student.rank}, &nbsp;years in:{" "}
+					{data.target_student.years_in}
 				</p>
 			</div>
 			<div>
-				<p>Based on: {data.audit.base_program}</p>{" "}
+				<p>Based on: {data.base_program}</p>{" "}
 			</div>
-			<div>&nbsp;STATUS:&nbsp;{data.audit.target_student.status}</div>
+			<div>&nbsp;STATUS:&nbsp;{data.target_student.status}</div>
 			<div style={styles.div_style}>
 				<p>
 					Progress through CORE&nbsp;({" "}
-					{data.audit.progress.CORE.completed.courses.length +
-						data.audit.progress.CORE.remaining.courses.length +
-						data.audit.progress.CORE.in_progress.courses.length}
+					{progress.CORE.completed.courses.length +
+						progress.CORE.remaining.courses.length +
+						progress.CORE.in_progress.courses.length}
 					&nbsp;courses,{" "}
-					{data.audit.progress.CORE.completed.credit_hours +
-						data.audit.progress.CORE.remaining.credit_hours +
-						data.audit.progress.CORE.in_progress.credit_hours}
+					{progress.CORE.completed.credit_hours +
+						progress.CORE.remaining.credit_hours +
+						progress.CORE.in_progress.credit_hours}
 					&nbsp;CH)&nbsp;&nbsp;&nbsp;
-					{data.audit.progress.CORE.remaining.courses.length}&nbsp;courses (
-					{data.audit.progress.CORE.remaining.credit_hours}CH)&nbsp; REMAINING
+					{progress.CORE.remaining.courses.length}&nbsp;courses (
+					{progress.CORE.remaining.credit_hours}CH)&nbsp; REMAINING
 				</p>{" "}
 			</div>
 			<div style={styles.CourseHeaders}>
 				Core Courses completed: &nbsp;&nbsp;&nbsp;
-				{data.audit.progress.CORE.completed.courses.length}&nbsp; courses
-				&nbsp;({data.audit.progress.CORE.completed.credit_hours}CH)&nbsp;
+				{progress.CORE.completed.courses.length}&nbsp; courses
+				&nbsp;({progress.CORE.completed.credit_hours}CH)&nbsp;
 			</div>
 			<lu>
-				{data.audit.progress.CORE.completed.courses.map((course) => {
+				{progress.CORE.completed.courses.map((course) => {
 					return <li style={styles.CourseCode}>&nbsp;{course}</li>;
 				})}
 			</lu>
 			<div style={styles.CourseHeaders}>
 				Core Courses in progress: &nbsp;&nbsp;&nbsp;
-				{data.audit.progress.CORE.in_progress.courses.length}&nbsp; courses
-				&nbsp;({data.audit.progress.CORE.in_progress.credit_hours}CH)&nbsp;
+				{progress.CORE.in_progress.courses.length}&nbsp; courses
+				&nbsp;({progress.CORE.in_progress.credit_hours}CH)&nbsp;
 			</div>
 			<lu>
-				{data.audit.progress.CORE.in_progress.courses.map((course) => {
+				{progress.CORE.in_progress.courses.map((course) => {
 					return <li style={styles.CourseCode}>&nbsp;{course}</li>;
 				})}
 			</lu>
 			<div style={styles.CourseHeaders}>
 				Core Courses remaining: &nbsp;&nbsp;&nbsp;
-				{data.audit.progress.CORE.remaining.courses.length}&nbsp; courses
-				&nbsp;({data.audit.progress.CORE.remaining.credit_hours}CH)&nbsp;
+				{progress.CORE.remaining.courses.length}&nbsp; courses
+				&nbsp;({progress.CORE.remaining.credit_hours}CH)&nbsp;
 			</div>
 			<lu>
-				{data.audit.progress.CORE.remaining.courses.map((course) => {
+				{progress.CORE.remaining.courses.map((course) => {
 					return <li style={styles.CourseCode}>&nbsp;{course}</li>;
 				})}
 			</lu>
 			<div style={styles.div_style}>
 				<p>
 					Progress through TE&nbsp;({" "}
-					{data.audit.progress.TE.completed.courses.length +
-						data.audit.progress["TE"].remaining.num_courses +
-						data.audit.progress.TE.in_progress.courses.length}
+					{progress.TE.completed.courses.length +
+						progress["TE"].remaining.num_courses +
+						progress.TE.in_progress.courses.length}
 					&nbsp;courses,{" "}
-					{data.audit.progress.TE.completed.credit_hours +
-						data.audit.progress.TE.remaining.credit_hours +
-						data.audit.progress.TE.in_progress.credit_hours}
+					{progress.TE.completed.credit_hours +
+						progress.TE.remaining.credit_hours +
+						progress.TE.in_progress.credit_hours}
 					&nbsp;CH)&nbsp;&nbsp;&nbsp;
-					{data.audit.progress.TE.remaining.num_courses}&nbsp;courses (
-					{data.audit.progress.TE.remaining.credit_hours}CH)&nbsp; REMAINING
+					{progress.TE.remaining.num_courses}&nbsp;courses (
+					{progress.TE.remaining.credit_hours}CH)&nbsp; REMAINING
 				</p>{" "}
 			</div>
 			<div style={styles.CourseHeaders}>
 				TE Courses completed: &nbsp;&nbsp;&nbsp;
-				{data.audit.progress.TE.completed.courses.length}&nbsp; courses &nbsp;(
-				{data.audit.progress.TE.completed.credit_hours}CH)&nbsp;
+				{progress.TE.completed.courses.length}&nbsp; courses &nbsp;(
+				{progress.TE.completed.credit_hours}CH)&nbsp;
 			</div>
 			<lu>
-				{data.audit.progress.TE.completed.courses.map((course) => {
+				{progress.TE.completed.courses.map((course) => {
 					return <li style={styles.CourseCode}>&nbsp;{course}</li>;
 				})}
 			</lu>
 			<div style={styles.CourseHeaders}>
 				TE Courses in progress: &nbsp;&nbsp;&nbsp;
-				{data.audit.progress.TE.in_progress.courses.length}&nbsp; courses
-				&nbsp;({data.audit.progress.TE.in_progress.credit_hours}CH)&nbsp;
+				{progress.TE.in_progress.courses.length}&nbsp; courses
+				&nbsp;({progress.TE.in_progress.credit_hours}CH)&nbsp;
 			</div>
 			<lu>
-				{data.audit.progress.TE.in_progress.courses.map((course) => {
+				{progress.TE.in_progress.courses.map((course) => {
 					return <li style={styles.CourseCode}>&nbsp;{course}</li>;
 				})}
 			</lu>{" "}
 			<div style={styles.div_style}>
 				<p>
 					Progress through NS&nbsp;({" "}
-					{data.audit.progress.NS.completed.courses.length +
-						data.audit.progress.NS.remaining.num_courses +
-						data.audit.progress.NS.in_progress.courses.length}
+					{progress.NS.completed.courses.length +
+						progress.NS.remaining.num_courses +
+						progress.NS.in_progress.courses.length}
 					&nbsp;courses,{" "}
-					{data.audit.progress.NS.completed.credit_hours +
-						data.audit.progress.NS.remaining.credit_hours +
-						data.audit.progress.NS.in_progress.credit_hours}
+					{progress.NS.completed.credit_hours +
+						progress.NS.remaining.credit_hours +
+						progress.NS.in_progress.credit_hours}
 					&nbsp;CH)&nbsp;&nbsp;&nbsp;
-					{data.audit.progress.NS.remaining.num_courses}&nbsp;courses (
-					{data.audit.progress.NS.remaining.credit_hours}CH)&nbsp; REMAINING
+					{progress.NS.remaining.num_courses}&nbsp;courses (
+					{progress.NS.remaining.credit_hours}CH)&nbsp; REMAINING
 				</p>{" "}
 			</div>
 			<div style={styles.CourseHeaders}>
 				NS Courses completed: &nbsp;&nbsp;&nbsp;
-				{data.audit.progress.NS.completed.courses.length}&nbsp; courses &nbsp;(
-				{data.audit.progress.NS.completed.credit_hours}CH)&nbsp;
+				{progress.NS.completed.courses.length}&nbsp; courses &nbsp;(
+				{progress.NS.completed.credit_hours}CH)&nbsp;
 			</div>
 			<div>
-				{data.audit.progress.NS.completed.courses.map((course) => {
-					return <h6 style={styles.CourseCode}>&nbsp;{course}</h6>;
+				{progress.NS.completed.courses.map((course) => {
+					return <li style={styles.CourseCode}>&nbsp;{course}</li>;
 				})}
 			</div>
 			<div style={styles.CourseHeaders}>
 				NS Courses in progress: &nbsp;&nbsp;&nbsp;
-				{data.audit.progress.NS.in_progress.courses.length}&nbsp; courses
-				&nbsp;({data.audit.progress.NS.in_progress.credit_hours}CH)&nbsp;
+				{progress.NS.in_progress.courses.length}&nbsp; courses
+				&nbsp;({progress.NS.in_progress.credit_hours}CH)&nbsp;
 			</div>
 			<div>
-				{data.audit.progress.NS.in_progress.courses.map((course) => {
-					return <h6 style={styles.CourseCode}>&nbsp;{course}</h6>;
+				{progress.NS.in_progress.courses.map((course) => {
+					return <li style={styles.CourseCode}>&nbsp;{course}</li>;
 				})}
 			</div>{" "}
 			<div style={styles.div_style}>
 				<p>
 					Progress through CSE&nbsp;({" "}
-					{data.audit.progress.CSE_ITS.completed.courses.length}{" "}
+					{progress["CSE-ITS"].completed.courses.length}{" "}
 					&nbsp;ITS,&nbsp;
-					{data.audit.progress.CSE_HSS.completed.courses.length}{" "}
+					{progress["CSE-HSS"].completed.courses.length}{" "}
 					&nbsp;HSS,&nbsp;
-					{data.audit.progress.CSE_OPEN.completed.courses.length} &nbsp;OPEN
+					{progress["CSE-OPEN"].completed.courses.length} &nbsp;OPEN
 					&nbsp;;{" "}
-					{data.audit.progress.CSE_HSS.completed.credit_hours +
-						data.audit.progress.CSE_OPEN.completed.credit_hours +
-						data.audit.progress.CSE_ITS.completed.credit_hours}
+					{progress["CSE-HSS"].completed.credit_hours +
+						progress["CSE-OPEN"].completed.credit_hours +
+						progress["CSE-ITS"].completed.credit_hours}
 					&nbsp;CH)&nbsp;&nbsp;&nbsp;
-					{data.audit.progress.CSE_ITS.remaining.num_courses +
-						data.audit.progress.CSE_HSS.remaining.num_courses +
-						data.audit.progress.CSE_OPEN.remaining.num_courses}
-					&nbsp;courses ({data.audit.progress.CSE_ITS.remaining.credit_hours}
+					{progress["CSE-ITS"].remaining.num_courses
+					}
+					&nbsp;courses ({progress["CSE-ITS"].remaining.credit_hours}
 					CH)&nbsp; REMAINING
 				</p>{" "}
 			</div>
-			<AuditCSE CSEData={data.audit.progress}></AuditCSE>
+			<AuditCSE CSEData={progress}></AuditCSE>
 		</div>
 	);
 };

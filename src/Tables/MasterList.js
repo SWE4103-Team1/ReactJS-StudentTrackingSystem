@@ -16,6 +16,9 @@ import React from "react";
 import {
 	CheckBox
 } from '../checkBox'
+
+
+
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = (val) => !val;
 
@@ -69,7 +72,7 @@ export function TableMasterList({
 				status: status,
 			});
 			selectKey(key);
-			console.log(key);
+		
 		}
 		
 	}
@@ -194,10 +197,47 @@ export function TableMasterList({
 				</tbody>
 			</table>
 			<pre>
+					<div> {
+					selectedFlatRows.map((row, index) =>{
+						prepareRow(row);
+						if(index === 0){
+							return (
+								<>
+								<tr><td></td> <td style = {{padding: "10px"}}>Student Number</td><td style = {{padding: "10px"}}>Name</td><td style = {{padding: "10px"}}>Program</td><td style = {{padding: "10px"}}>Campus</td><td style = {{padding: "10px"}}>Rank</td><td style = {{padding: "10px"}}>status</td></tr>
+								<tr
+									style ={{padding:"15px"}}								
+									{...row.getRowProps()}>  
+									{row.cells.map((cell) => {
+										return (
+											<td onClick={() => enterAdvanced(row, cell)} style = {{padding: "15px"}} {...cell.getCellProps()}>
+												{cell.render("Cell")}
+											</td>
+										);
+									})}
+								</tr>  </>
+						)
+						}
+						else{
+							return (
+								<tr
+									style ={{padding:"15px"}}								
+									{...row.getRowProps()}>  
+									{row.cells.map((cell) => {
+										return (
+											<td onClick={() => enterAdvanced(row, cell)} style = {{padding: "15px"}} {...cell.getCellProps()}>
+												{cell.render("Cell")}
+											</td>
+										);
+									})}
+								</tr>
+						)
+						}
+					})}</div>
+				
 								<code>
 									{JSON.stringify(
 										{
-											selectedFlatRows: selectedFlatRows.map((row) => row.original),
+											selectedRows: selectedFlatRows.map((row) => row.original),
 										},
 										null,
 										2

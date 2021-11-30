@@ -4,6 +4,7 @@ import {
 	NumberRangeColumnFilter,
 	SelectColumnFilter,
 	compareCourseCode,
+	compareRank
 } from "./Filters";
 
 // To Do: UseMemo Columns
@@ -32,8 +33,14 @@ export const columns = [
 			{
 				Header: "Rank",
 				accessor: "rank",
+				sortType: compareRank,
 				Filter: SelectColumnFilter,
 			},
+			{
+				Header: "Status",
+				accessor: "status",
+				Filter: SelectColumnFilter,
+			}
 		],
 	},
 ];

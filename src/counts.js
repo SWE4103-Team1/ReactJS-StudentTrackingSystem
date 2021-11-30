@@ -45,7 +45,7 @@ export default function Counts() {
     	const regexArr = [/\d{4}-\d{4}$/, /\d{4}\/FA|WI|SM$/];
 		let url = "";
 		let regIdx = 0;
-		let getURL = 
+		
 		if (value.title.toLowerCase() === "cohort") {
       		url = "http://127.0.0.1:8000/api/counts_cohort/" + value.input;
 		} else {

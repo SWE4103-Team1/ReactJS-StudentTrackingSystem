@@ -25,6 +25,8 @@ function App() {
 	const [TranscriptData, setTranscriptData] = React.useState([]);
 	const [showAudit, setShowAudit] = React.useState(false);
 	const [advancedKey, advancedKeySet] = React.useState([]);
+	const [transcriptLoading, settranscriptLoading] = React.useState(true)
+	const [auditLoading, setauditLoading] = React.useState(true)
 	const [transcriptInfo, setTranscriptInfo] = React.useState({
 		name: '',
 		program: '',
@@ -41,7 +43,6 @@ function App() {
 	const handleCloseAudit = () => setShowAudit(false);
 
 
-	console.log(modalShow);
 	React.useEffect(() => {
 		(async () => {
 			await makeData(setData);
@@ -50,7 +51,8 @@ function App() {
 
 	React.useEffect(() => {
 		(async () => {
-			await makeTranscript(advancedKey, setTranscriptData);
+			await makeTranscript(advancedKey, setTranscriptData, settranscriptLoading);
+		
 		})();
 	}, [advancedKey]);
 
@@ -59,11 +61,14 @@ function App() {
 
     React.useEffect(() => {
 		(async () => {
-			await InAppAudit(advancedKey,setAuditData);
+			await InAppAudit(advancedKey,setAuditData, setauditLoading);
+			
 		})();
 
 		
 	}, [advancedKey]);
+
+
 	function handleTabs(eventKey) {
 		
 		if(eventKey === false){
@@ -79,8 +84,8 @@ function App() {
 
 
 	function Transcript({audit}) {
-		console.log("Tranny",advancedKey)
-		if(!audit){
+	
+		if(!audit && !transcriptLoading){
 			return( <>
 				<div className='row_modal'>
 				   <div className='column_modal'>
@@ -105,13 +110,18 @@ function App() {
 			   </div> 
 			   </> );
 		}
-		else{
-			return (<div><Button  size="lg" variant='outline-secondary'>Generate Text Audit</Button>
+		else if(audit ){
+			return (<div style = {{boxShadow: "1px 3px 1px #9E9E9E", display: "inline-block"}}><Button  size="lg" variant='outline-secondary'>Generate Text Audit</Button>
 			
 			<Audit data = {auditData} ></Audit>
 			
 			</div>);
 
+		}
+		else{
+			return (
+				<div><h3>Loading ...</h3></div>
+			);
 		}
 			
 		

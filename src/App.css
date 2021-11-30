@@ -12,10 +12,15 @@
 .styled-table thead tr {
   background-color: #f00000;
   color: #ffffff;
-  text-align: center;
+  text-align: left;
 }
 
-.styled-table th,
+.styled-table th{
+  width: 120px;
+  padding-bottom: 10px;
+  padding-left: 8px;
+  text-align: center;
+}
 .styled-table td {
   text-align: center;
   width: 160px;
@@ -24,7 +29,7 @@
 
 
 .styled-table tbody {
-  width: 820px;
+  width: 905px;
   display: inline-block;
  
 
