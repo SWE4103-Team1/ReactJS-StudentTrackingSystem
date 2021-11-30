@@ -10,7 +10,7 @@ import "./styles.css";
 export default function TextAuditButton() {
     // A list storing the student numbers of all students we want to audit
     //let studentNumbers = [];
-    const studentNumbers = useMemo(() => [5871602], []);
+    const studentNumbers = useMemo(() => [5335495], []);
 
     // A dictionary which contains the audit information for each student being audited
     // Key is student number, value is audit information gathered from InAppAudit
@@ -81,7 +81,14 @@ export default function TextAuditButton() {
 
 		    lines = lines.concat(courseHeader)
 
-            if (course === "CORE") lines = lines.concat(["()** indicates equivelent course replacement\n\n",]);
+            if (course === "CORE") 
+            {
+                lines = lines.concat(["()** indicates equivelent course replacement\n\n",]);
+            }
+            else
+            {
+                lines = lines.concat(["\n"]);
+            }
 
 		    let completedBody = [
 		    	course, " courses completed:    ", completed.length.toString(), " courses (", completedCH.toString(), "CH)\n",
@@ -147,6 +154,63 @@ export default function TextAuditButton() {
                 remainingBody = remainingBody.concat(["\n\n"]);
             
 		    	lines = lines.concat(remainingBody)
+            }
+        }
+
+        // CSE TIME!
+        let cse = courses["CSE"];
+        let totalITS = cse["ITS"]["completed"]["courses"].length + cse["ITS"]["remaining"]["num_courses"] + cse["ITS"]["in_progress"]["courses"].length;
+        let totalITSCH = cse["ITS"]["completed"]["credit_hours"] + cse["ITS"]["remaining"]["credit_hours"] + cse["ITS"]["in_progress"]["credit_hours"];
+        let totalHSS = cse["HSS"]["completed"]["courses"].length + cse["HSS"]["remaining"]["num_courses"] + cse["HSS"]["in_progress"]["courses"].length;
+        let totalHSSCH = cse["HSS"]["completed"]["credit_hours"] + cse["HSS"]["remaining"]["credit_hours"] + cse["HSS"]["in_progress"]["credit_hours"];
+        let totalOPEN = cse["OPEN"]["completed"]["courses"].length + cse["OPEN"]["remaining"]["num_courses"] + cse["OPEN"]["in_progress"]["courses"].length;
+        let totalOPENCH = cse["OPEN"]["completed"]["credit_hours"] + cse["OPEN"]["remaining"]["credit_hours"] + cse["OPEN"]["in_progress"]["credit_hours"];
+
+        let totalCSECH = totalITSCH + totalHSSCH + totalOPENCH;
+        let totalCSERemaining = cse["HSS"]["remaining"]["num_courses"] + cse["ITS"]["remaining"]["num_courses"] + cse["OPEN"]["remaining"]["num_courses"];
+        let totalCSECHRemaining = cse["HSS"]["remaining"]["credit_hours"] + cse["ITS"]["remaining"]["credit_hours"] + cse["OPEN"]["remaining"]["credit_hours"];
+
+        let cseHeader = [
+            "\n\n==========================================================================\n",
+            "Progress through CSE (", totalITS.toString(), " ITS, ", totalHSS.toString(), " HSS, ", 
+            totalOPEN.toString(), " OPEN; ", totalCSECH.toString(), "CH)     ",
+            totalCSERemaining.toString(), " courses (", totalCSECHRemaining.toString(), ") REMAINING\n",
+            "==========================================================================\n",
+        ];
+
+        lines = lines.concat(cseHeader);
+
+        for (const [cseCourse, cseData] of Object.entries(cse))
+        {
+            let completed = cseData["completed"]["courses"];
+            let inProgress = cseData["in_progress"]["courses"]
+
+            if (completed.length > 0)
+            {
+                lines = lines.concat(["CSE-", cseCourse, " ", completed.length.toString(), " (",
+                cseData["completed"]["credit_hours"].toString(), "ch) complete: "
+                ])
+
+                for (const code of completed)
+                {
+                    lines = lines.concat([code, ", "])
+                }
+
+                lines = lines.concat(["\n"]);
+            }
+
+            if (inProgress.length > 0)
+            {
+                lines = lines.concat(["CSE-", cseCourse, " ", inProgress.length.toString(), " (",
+                cseData["in_progress"]["credit_hours"].toString(), "ch) inprogress: "
+                ])
+
+                for (const code of inProgress)
+                {
+                    lines = lines.concat([code, ", "])
+                }
+
+                lines = lines.concat(["\n"]);
             }
         }
 
