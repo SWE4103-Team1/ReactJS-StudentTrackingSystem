@@ -62,24 +62,20 @@ export  async function makeData(setData) {
     let getURL = window.location.hostname;
  
     if(key.length !== 0){
-      if(getURL === 'localhost'){
+      if(getURL === 'localhost' || getURL === '127.0.0.1'){
       
-        const url = "http://127.0.0.1:8000/audit_student/" + key[1] + "";
-        // 
+        const url = "http://"+ getURL + ":8000/audit_student/" + key[1] + "";
         
         let response = await fetch(url)
         response = await response.json()
-      
-          
-      
        
         return setData(response);
       }
       else{
       
         const url = "http://swe4103-env.eba-irrkpdyi.us-east-2.elasticbeanstalk.com/_get_Audit/" + key[1] + "";
-        let data = null
         let response = await axios.get(url)
+        let data = await response.json();
         
         // console.log(response.data);
         setauditLoading(false)

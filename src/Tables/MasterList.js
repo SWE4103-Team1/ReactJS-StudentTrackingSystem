@@ -237,7 +237,7 @@ export function TableMasterList({
 								<code>
 									{JSON.stringify(
 										{
-											selectedRows: selectedFlatRows.map((row) => row.original),
+											//selectedRows: selectedFlatRows.map((row) => row.original),
 										},
 										null,
 										2

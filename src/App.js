@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import Counts from "./counts";
+import TextAuditButton from "./textAudits"
 // A great library for fuzzy filtering/sorting items
 
 import "./App.css";
@@ -133,8 +134,6 @@ function App() {
 	}
 	return (
 		<>
-			<Button  size="lg" variant='outline-secondary'>Generate Text Audit</Button>
-			<br />
 			<div className='master-container'>
 			
 				<div className='div-table'>
@@ -179,6 +178,9 @@ function App() {
 						</Nav> */}
 					
 							
+				</div>
+				<div className='div-textAudit'>
+					<TextAuditButton></TextAuditButton>
 				</div>
 				<div className='div-counts'>
 					<Counts></Counts>
