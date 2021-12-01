@@ -35,8 +35,10 @@ function App() {
 		rank: '',
 		status: '',
 	});
-	
 
+	// Holds a list of student numbers for the currently checked rows within the master list
+	const [checkedSIDs, setCheckedSIDs] = React.useState([]);
+	
 	const [modalShow, setModalShow] = React.useState(false);
 	const handleClose = () => setModalShow(false);
 	const handleShow = () => setModalShow(true);
@@ -166,6 +168,7 @@ function App() {
 						modalState={modalShow}
 						selectKey={advancedKeySet}
 						selectRow={setTranscriptInfo}
+						updateChecked={setCheckedSIDs}
 					/>
 					{/* <Nav variant="tabs"  onSelect={(e)=>setShowAudit(e)} >
 							<Nav.Item>
@@ -180,7 +183,7 @@ function App() {
 							
 				</div>
 				<div className='div-textAudit'>
-					<TextAuditButton></TextAuditButton>
+					<TextAuditButton checked={checkedSIDs}></TextAuditButton>
 				</div>
 				<div className='div-counts'>
 					<Counts></Counts>

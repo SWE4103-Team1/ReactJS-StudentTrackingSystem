@@ -7,15 +7,10 @@ import axios from "axios";
 
 import "./styles.css";
 
-export default function TextAuditButton() {
-    // A list storing the student numbers of all students we want to audit
-    //let studentNumbers = [];
-    const studentNumbers = useMemo(() => [5335495], []);
-
+export default function TextAuditButton({checked}) {
     // A dictionary which contains the audit information for each student being audited
     // Key is student number, value is audit information gathered from InAppAudit
     let audits = {};
-    //const audits = useMemo(() => {}, []);
 
     // Keeps track of whether or not we are fetching api for audit data
     const [auditLoading, setAuditLoading] = useState(false);
@@ -214,6 +209,8 @@ export default function TextAuditButton() {
             }
         }
 
+        lines = lines.concat(["\n\n"]);
+
         return lines.join('');
     }
 
@@ -233,7 +230,7 @@ export default function TextAuditButton() {
         {
             // FETCH THE AUDIT INFORMATION FOR EACH STUDENT REQUESTED
             let promiseArr = [];
-            for (const key of studentNumbers)
+            for (const key of checked)
             {
                 promiseArr.push(getAuditData(key));
             }
@@ -259,7 +256,7 @@ export default function TextAuditButton() {
                 setAuditLoading(false);
             });
         }
-    }, [studentNumbers, audits, auditLoading]);
+    }, [checked, audits, auditLoading]);
 
     const handleClick = () => setAuditLoading(true);
 

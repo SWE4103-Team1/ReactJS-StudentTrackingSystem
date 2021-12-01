@@ -30,6 +30,7 @@ export function TableMasterList({
 	modalState,
 	selectKey,
 	selectRow,
+	updateChecked,
 }) {
 	function enterAdvanced(row, cell) {
 		if(cell.column.id !== "selection"){
@@ -142,6 +143,22 @@ export function TableMasterList({
 			});
 		}
 		);// useGlobalFilter!
+
+	// Update the list of checked students
+	React.useEffect(() => {
+		let SIDs = [];
+		for (const row of selectedFlatRows)
+		{
+			row.cells.map((cell) => {
+				if (cell.column.id === "student_number") {
+					SIDs.push(cell.value);
+				}
+			});
+		}
+
+		updateChecked(SIDs);
+
+	}, [selectedFlatRows]);
 
 
 	// We don't want to render all of the rows for this example, so cap
