@@ -114,11 +114,12 @@ function App() {
 			   </> );
 		}
 		else if(audit ){
-			return (<div style = {{boxShadow: "1px 3px 1px #9E9E9E", display: "inline-block"}}><Button  size="lg" variant='outline-secondary'>Generate Text Audit</Button>
+			return (
+				<div style = {{boxShadow: "1px 3px 1px #9E9E9E", display: "inline-block"}}>
+					<TextAuditButton checked={[advancedKey[1]]} buttonVariant='outline-secondary'>Generate Text Audit</TextAuditButton>
+					<Audit data = {auditData} ></Audit>
 			
-			<Audit data = {auditData} ></Audit>
-			
-			</div>);
+				</div>);
 
 		}
 		else{
@@ -183,7 +184,7 @@ function App() {
 							
 				</div>
 				<div className='div-textAudit'>
-					<TextAuditButton checked={checkedSIDs}></TextAuditButton>
+					<TextAuditButton checked={checkedSIDs} buttonVariant='danger'></TextAuditButton>
 				</div>
 				<div className='div-counts'>
 					<Counts></Counts>
