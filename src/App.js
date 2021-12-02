@@ -19,14 +19,65 @@ import { Modal } from "react-bootstrap";
 import { TableTranscript } from "./Tables/Transcript";
 import { columnsTranscripts } from "./ColumnsFilters/Columns";
 import {Audit} from './Tables/InAppAudit'
-
+import LoadingOverlay from 'react-loading-overlay';
 import {InAppAudit} from './makeData'
+import Loader from "react-loader-spinner";
+import axios from "axios";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
+// async function  fetchData(advancedKey,setAuditData, setTranscriptData ) {
+// 	let getURL = window.location.hostname;
+	
+	
+// 	const TranscriptURL = ''
+// 	const AuditURL = ''
+
+// 	const trans = axios.get(TranscriptURL)
+// 	const audit = axios.get(AuditURL)
+
+// 	axios.all([trans, audit]).then(
+// 		axios.spread((...allData)=> {
+
+// 		})
+// 	)
+
+
+
+// 	let getURL = window.location.hostname;
+//     if(key.length !== 0){
+//       if(getURL === 'localhost' || getURL === '127.0.0.1'){
+      
+//         const url = "http://"+ getURL + ":8000/get_transcript/" + key[1] + "";
+
+// 		const TranscriptURL = 'http://"+ getURL + ":8000/get_transcript/" + key[1] + "'
+// 		const AuditURL = ''
+//         const response = await fetch(url);
+//         const data = await response.json();
+//         settranscriptLoading(false)
+    
+//         return setData(data);
+//       }
+//       else{
+        
+//         const url = "http://"+ getURL + "/get_transcript/" + key[1] + "";
+//         const response = await fetch(url);
+//         const data = await response.json();
+       
+//         settranscriptLoading(false)
+//         return setData(data);
+//       }
+    
+//     }
+// }
+
+
 function App() {
 	const [data, setData] = React.useState([]);
 	const [TranscriptData, setTranscriptData] = React.useState([]);
 	const [showAudit, setShowAudit] = React.useState(false);
 	const [advancedKey, advancedKeySet] = React.useState([]);
-	const [transcriptLoading, settranscriptLoading] = React.useState(true)
+	const [transcriptLoading, settranscriptLoading] = React.useState(false)
+	const [isActive, setisActive] = React.useState(false);
 	const [auditLoading, setauditLoading] = React.useState(true)
 	const [transcriptInfo, setTranscriptInfo] = React.useState({
 		name: '',
@@ -52,20 +103,14 @@ function App() {
 		})();
 	}, []);
 
-	React.useEffect(() => {
-		(async () => {
-			await makeTranscript(advancedKey, setTranscriptData, settranscriptLoading);
-		
-		})();
-	}, [advancedKey]);
 
 	const [auditData, setAuditData] = React.useState({})
    
 
     React.useEffect(() => {
 		(async () => {
-			await InAppAudit(advancedKey,setAuditData, setauditLoading);
-			
+			await InAppAudit(advancedKey,setAuditData);
+			await makeTranscript(advancedKey, setTranscriptData, settranscriptLoading);
 		})();
 
 		
@@ -90,7 +135,19 @@ function App() {
 	
 		if(!audit && !transcriptLoading){
 			return( <>
-				<div className='row_modal'>
+				
+			   <Modal
+						show={modalShow}
+						onHide={handleClose}
+						aria-labelledby='example-modal-sizes-title-lg'
+						size='xl'>
+						<Modal.Header closeButton>
+						
+						<Button  size="lg" variant='outline-secondary'  onClick = {() => setShowAudit(false)}>Transcript</Button>
+						<Button  size="lg" variant='outline-secondary'  onClick = {() => setShowAudit(true)}>Audit</Button>
+						</Modal.Header>
+						<Modal.Body>
+						<div className='row_modal'>
 				   <div className='column_modal'>
 					   <TableTranscript
 						   columns={columnsTranscripts}
@@ -111,20 +168,56 @@ function App() {
 					   
 				   </div>
 			   </div> 
+							
+						</Modal.Body>
+						<Modal.Footer>
+							<Button variant='secondary' onClick={handleClose}>
+								Close
+							</Button>
+						</Modal.Footer>
+					</Modal>
 			   </> );
 		}
 		else if(audit ){
 			return (
-				<div style = {{boxShadow: "1px 3px 1px #9E9E9E", display: "inline-block"}}>
-					<TextAuditButton checked={[advancedKey[1]]} buttonVariant='outline-secondary'>Generate Text Audit</TextAuditButton>
-					<Audit data = {auditData} ></Audit>
 			
-				</div>);
+			
+			<Modal
+						show={modalShow}
+						onHide={handleClose}
+						aria-labelledby='example-modal-sizes-title-lg'
+						size='xl'>
+						<Modal.Header closeButton>
+						
+						<Button  size="lg" variant='outline-secondary'  onClick = {() => setShowAudit(false)}>Transcript</Button>
+						<Button  size="lg" variant='outline-secondary'  onClick = {() => setShowAudit(true)}>Audit</Button>
+						</Modal.Header>
+						<Modal.Body>
+							
+						<div style = {{boxShadow: "1px 3px 1px #9E9E9E", display: "inline-block"}}><Button  size="lg" variant='outline-secondary'>Generate Text Audit</Button>
+			
+			<Audit data = {auditData} ></Audit>
+			
+			</div>
+							
+						</Modal.Body>
+						<Modal.Footer>
+							<Button variant='secondary' onClick={handleClose}>
+								Close
+							</Button>
+						</Modal.Footer>
+					</Modal>);
 
 		}
 		else{
 			return (
-				<div><h3>Loading ...</h3></div>
+				<Modal
+						show={modalShow}
+						onHide={handleClose}
+						aria-labelledby='example-modal-sizes-title-lg'
+						size='xl'>
+						<div className="spin"></div>
+					</Modal>
 			);
 		}
 			
@@ -139,28 +232,15 @@ function App() {
 		<>
 			<div className='master-container'>
 			
+			
+			
+					
 				<div className='div-table'>
-					<Modal
-						show={modalShow}
-						onHide={handleClose}
-						aria-labelledby='example-modal-sizes-title-lg'
-						size='xl'>
-						<Modal.Header closeButton>
-						
-						<Button  size="lg" variant='outline-secondary'  onClick = {() => setShowAudit(false)}>Transcript</Button>
-						<Button  size="lg" variant='outline-secondary'  onClick = {() => setShowAudit(true)}>Audit</Button>
-						</Modal.Header>
-						<Modal.Body>
-							
-						<Transcript audit = {showAudit}></Transcript>
-							
-						</Modal.Body>
-						<Modal.Footer>
-							<Button variant='secondary' onClick={handleClose}>
-								Close
-							</Button>
-						</Modal.Footer>
-					</Modal>
+					
+					
+					
+					<Transcript audit = {showAudit}></Transcript>
+					
 					<TableMasterList
 						columns={columns}
 						data={data}
@@ -170,6 +250,7 @@ function App() {
 						selectKey={advancedKeySet}
 						selectRow={setTranscriptInfo}
 						updateChecked={setCheckedSIDs}
+						setTranLoad={settranscriptLoading}
 					/>
 					{/* <Nav variant="tabs"  onSelect={(e)=>setShowAudit(e)} >
 							<Nav.Item>

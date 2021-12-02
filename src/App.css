@@ -1,6 +1,36 @@
+
+ @keyframes spinner {
+            0% {
+                transform: translate3d(-50%, -50%, 0) rotate(0deg);
+            }
+    
+            100% {
+                transform: translate3d(-50%, -50%, 0) rotate(360deg);
+            }
+        }
+    
+        .spin::before {
+            animation: 1.5s linear infinite spinner;
+            animation-play-state: inherit;
+            border: solid 5px #cfd0d1;
+            border-bottom-color: #f00b0b;
+            border-radius: 50%;
+            content: "";
+            height: 80px;
+            width: 80px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate3d(-50%, -50%, 0);
+            will-change: transform;
+        }
+
+
 .styled-table {
   display: inline-block;
- 
+
+  
+  
   border-collapse: collapse;
   font-size: 0.9em;
   font-family: sans-serif;
@@ -9,7 +39,13 @@
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
 }
 
+
+.styled-table thead th {
+ 
+}
+
 .styled-table thead tr {
+  border-radius: 20px;
   background-color: #f00000;
   color: #ffffff;
   text-align: left;
@@ -31,6 +67,7 @@
 .styled-table tbody {
   width: 905px;
   display: inline-block;
+
  
 
   
@@ -122,3 +159,4 @@ input {
   padding-left: 40px;
   float:left;
 }
+

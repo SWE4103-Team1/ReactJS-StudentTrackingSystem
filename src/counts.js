@@ -45,13 +45,24 @@ export default function Counts() {
     	const regexArr = [/\d{4}-\d{4}$/, /\d{4}\/FA|WI|SM$/];
 		let url = "";
 		let regIdx = 0;
-		
-		if (value.title.toLowerCase() === "cohort") {
-      		url = "http://127.0.0.1:8000/api/counts_cohort/" + value.input;
-		} else {
-			url = "http://127.0.0.1:8000/api/counts_semester/" + value.input;
-			regIdx = 1;
+		let getURL = window.location.hostname;
+		if(getURL === 'localhost' || getURL === '127.0.0.1'){
+			if (value.title.toLowerCase() === "cohort") {
+				url = "http://"+getURL+":8000/api/counts_cohort/" + value.input;
+		  } else {
+			  url = "http://"+getURL+":8000/api/counts_semester/" + value.input;
+			  regIdx = 1;
+		  }
 		}
+		else{
+			if (value.title.toLowerCase() === "cohort") {
+				url = "http://"+getURL+"/api/counts_cohort/" + value.input;
+		  } else {
+			  url = "http://"+getURL+"/api/counts_semester/" + value.input;
+			  regIdx = 1;
+		  }
+		}
+		
 
 		// Only call API if the input matches regular expression based
 		// on parameter used
@@ -73,32 +84,66 @@ export default function Counts() {
 	// cohort (start date) and semester currently being stored in the database. Stores
 	// these values as react-bootstrap dropdown items in the items state variable
 	useEffect(() => {
-		axios.get("http://127.0.0.1:8000/api/count_parameters").then((res) => {
-			let cohortItems = [];
-			for (const cohort of res.data.cohorts) {
-				cohortItems.push(
-					<Dropdown.Item eventKey={cohort}>{cohort}</Dropdown.Item>
-				);
-			}
 
-			let semesterItems = [];
-			for (const semester of res.data.semesters) {
-				semesterItems.push(
-					<Dropdown.Item eventKey={semester}>{semester}</Dropdown.Item>
-				);
-			}
 
-			setItems({
-        		cohortList: res.data.cohorts,
-        		semesterList: res.data.semesters,
-        		cohortDropdowns: cohortItems,
-        		semesterDropdowns: semesterItems
+		let getURL = window.location.hostname;
+		if(getURL === 'localhost' || getURL === '127.0.0.1'){
+			axios.get("http://"+getURL+":8000/api/count_parameters").then((res) => {
+				let cohortItems = [];
+				for (const cohort of res.data.cohorts) {
+					cohortItems.push(
+						<Dropdown.Item eventKey={cohort}>{cohort}</Dropdown.Item>
+					);
+				}
+	
+				let semesterItems = [];
+				for (const semester of res.data.semesters) {
+					semesterItems.push(
+						<Dropdown.Item eventKey={semester}>{semester}</Dropdown.Item>
+					);
+				}
+	
+				setItems({
+					cohortList: res.data.cohorts,
+					semesterList: res.data.semesters,
+					cohortDropdowns: cohortItems,
+					semesterDropdowns: semesterItems
+				});
+	
+				setValue({ title: "Cohort", input: res.data.cohorts[0] });
+	
+				setMenu(cohortItems);
 			});
-
-			setValue({ title: "Cohort", input: res.data.cohorts[0] });
-
-			setMenu(cohortItems);
-		});
+		}
+		else{
+			axios.get("http://"+getURL+"/api/count_parameters").then((res) => {
+				let cohortItems = [];
+				for (const cohort of res.data.cohorts) {
+					cohortItems.push(
+						<Dropdown.Item eventKey={cohort}>{cohort}</Dropdown.Item>
+					);
+				}
+	
+				let semesterItems = [];
+				for (const semester of res.data.semesters) {
+					semesterItems.push(
+						<Dropdown.Item eventKey={semester}>{semester}</Dropdown.Item>
+					);
+				}
+	
+				setItems({
+					cohortList: res.data.cohorts,
+					semesterList: res.data.semesters,
+					cohortDropdowns: cohortItems,
+					semesterDropdowns: semesterItems
+				});
+	
+				setValue({ title: "Cohort", input: res.data.cohorts[0] });
+	
+				setMenu(cohortItems);
+			});
+		}
+		
 	}, []);
 
 	return (
