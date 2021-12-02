@@ -22,7 +22,7 @@ export default function TextAuditButton({checked, buttonVariant}) {
         let getURL = window.location.hostname;
         let url = ((getURL === 'localhost' || getURL === '127.0.0.1') ? 
             "http://"+ getURL + ":8000/audit_student/" + sid + "" : 
-            "http://swe4103-env.eba-irrkpdyi.us-east-2.elasticbeanstalk.com/_get_Audit/" + sid + "");
+            "http://" + getURL + "/audit_student/" + sid + "");
 
         let response = await axios.get(url);
         return response.data;
