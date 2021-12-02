@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import {Button} from "react-bootstrap";
@@ -7,7 +7,7 @@ import axios from "axios";
 
 import "./styles.css";
 
-export default function TextAuditButton({checked}) {
+export default function TextAuditButton({checked, buttonVariant}) {
     // A dictionary which contains the audit information for each student being audited
     // Key is student number, value is audit information gathered from InAppAudit
     let audits = {};
@@ -263,7 +263,7 @@ export default function TextAuditButton({checked}) {
     return (
         <>
 		    <Button 
-                variant="danger" 
+                variant={buttonVariant} 
                 size="lg"
                 disabled={auditLoading}
                 onClick={!auditLoading ? handleClick : null}

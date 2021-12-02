@@ -265,7 +265,7 @@ function App() {
 							
 				</div>
 				<div className='div-textAudit'>
-					<TextAuditButton checked={checkedSIDs}></TextAuditButton>
+					<TextAuditButton checked={checkedSIDs} buttonVariant='danger'></TextAuditButton>
 				</div>
 				<div className='div-counts'>
 					<Counts></Counts>
