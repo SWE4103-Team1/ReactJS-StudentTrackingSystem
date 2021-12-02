@@ -57,7 +57,7 @@ export  async function makeData(setData) {
 	}
 
   
-  export async function InAppAudit(key, setData, setauditLoading) {
+  export async function InAppAudit(key, setData) {
 
     let getURL = window.location.hostname;
  
@@ -73,12 +73,12 @@ export  async function makeData(setData) {
       }
       else{
       
-        const url = "http://swe4103-env.eba-irrkpdyi.us-east-2.elasticbeanstalk.com/_get_Audit/" + key[1] + "";
+        const url = "http://"+ getURL + "/audit_student/" + key[1] + "";
         let response = await axios.get(url)
         let data = await response.json();
         
         // console.log(response.data);
-        setauditLoading(false)
+   
         
         return setData(data);
       }

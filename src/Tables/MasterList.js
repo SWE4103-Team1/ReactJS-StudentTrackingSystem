@@ -31,6 +31,7 @@ export function TableMasterList({
 	selectKey,
 	selectRow,
 	updateChecked,
+	setTranLoad
 }) {
 	function enterAdvanced(row, cell) {
 		if(cell.column.id !== "selection"){
@@ -64,6 +65,7 @@ export function TableMasterList({
 					return cell.value;
 				}
 			});
+			setTranLoad(true)
 			modalOpen();
 			selectRow({
 				name: name,
@@ -168,11 +170,13 @@ export function TableMasterList({
 	return (
 		<>
 			<table className='styled-table' {...getTableProps()}>
-				<thead>
-					{headerGroups.map((headerGroup) => (
-						<tr {...headerGroup.getHeaderGroupProps()}>
+				<thead >
+					{headerGroups.map((headerGroup, index) => {
+						if(index > 0){
+							return (
+				<tr  {...headerGroup.getHeaderGroupProps()}>
 							{headerGroup.headers.map((column) => (
-								<th {...column.getHeaderProps(column.getSortByToggleProps())}>
+								<th  {...column.getHeaderProps(column.getSortByToggleProps())}>
 									{column.render("Header")}
 									{/* Render the columns filter UI */}
 									<div>
@@ -188,10 +192,12 @@ export function TableMasterList({
 								</th>
 							))}
 						</tr>
-					))}
-					<tr>
-						<th colSpan={visibleColumns.length}></th>
-					</tr>
+							)
+
+						}
+						
+					})}
+					
 				</thead>
 				<tbody {...getTableBodyProps()}>
 					{firstPageRows.map((row, i) => {
@@ -251,15 +257,7 @@ export function TableMasterList({
 						}
 					})}</div>
 				
-								<code>
-									{JSON.stringify(
-										{
-											//selectedRows: selectedFlatRows.map((row) => row.original),
-										},
-										null,
-										2
-									)}  
-								</code>
+								
 							</pre>
 			<br />
 		</>
