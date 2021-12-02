@@ -3,6 +3,9 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {Button} from "react-bootstrap";
 
+import JSZip from "jszip"
+import { saveAs } from 'file-saver';
+
 import axios from "axios";
 
 import "./styles.css";
@@ -235,23 +238,34 @@ export default function TextAuditButton({checked, buttonVariant}) {
                 promiseArr.push(getAuditData(key));
             }
 
+            // Create new object for zipping
+            let zip = new JSZip();
+
             Promise.all(promiseArr).then(responses => {
                 for (const resp of responses)
                 {
                     audits[resp["target_student"]["student_number"]] = resp;
                 }
 
-                let filename = "";
-                let text = "";
+                //let filename = "";
+                //let text = "";
                 for (const [sid, data] of Object.entries(audits))
                 {
-                    filename += sid + "-";
-                    text += parseAuditData(data);
+                    //filename += sid + "-";
+                    //text += parseAuditData(data);
+
+                    // Add audit file for sid to zip file
+                    zip.file(sid + '-' + 'audit.txt', parseAuditData(data));
                 }
 
-                filename += "audit.txt"
+                // Save zip file
+                zip.generateAsync({type: "blob"}).then(content => {
+                    saveAs(content, "audits.zip");
+                });
 
-                createTxtFile(filename, text);
+                //filename += "audit.txt"
+
+                //createTxtFile(filename, text);
 
                 setAuditLoading(false);
             });
