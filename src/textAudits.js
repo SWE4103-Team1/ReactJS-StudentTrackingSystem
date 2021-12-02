@@ -217,16 +217,6 @@ export default function TextAuditButton({checked, buttonVariant}) {
         return lines.join('');
     }
 
-    // Creates the text file using some stupid html magic <a> tags, thanks google
-    const createTxtFile = (filename, text) => {
-        const element = document.createElement("a");
-        const file = new Blob([text], {type: 'text/plain'});
-        element.href = URL.createObjectURL(file);
-        element.download = filename;
-        document.body.appendChild(element); // Required for this to work in FireFox
-        element.click();
-    }
-
     // Fires each time Generate Text Audit button is pressed
     useEffect(() => {
         if (auditLoading)
@@ -247,25 +237,16 @@ export default function TextAuditButton({checked, buttonVariant}) {
                     audits[resp["target_student"]["student_number"]] = resp;
                 }
 
-                //let filename = "";
-                //let text = "";
                 for (const [sid, data] of Object.entries(audits))
                 {
-                    //filename += sid + "-";
-                    //text += parseAuditData(data);
-
                     // Add audit file for sid to zip file
-                    zip.file(sid + '-' + 'audit.txt', parseAuditData(data));
+                    zip.file(sid + "-audit.txt", parseAuditData(data));
                 }
 
                 // Save zip file
                 zip.generateAsync({type: "blob"}).then(content => {
                     saveAs(content, "audits.zip");
                 });
-
-                //filename += "audit.txt"
-
-                //createTxtFile(filename, text);
 
                 setAuditLoading(false);
             });

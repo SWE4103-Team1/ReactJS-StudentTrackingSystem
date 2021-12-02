@@ -194,11 +194,10 @@ function App() {
 						</Modal.Header>
 						<Modal.Body>
 							
-						<div style = {{boxShadow: "1px 3px 1px #9E9E9E", display: "inline-block"}}><Button  size="lg" variant='outline-secondary'>Generate Text Audit</Button>
-			
-			<Audit data = {auditData} ></Audit>
-			
-			</div>
+						<div style = {{boxShadow: "1px 3px 1px #9E9E9E", display: "inline-block"}}>
+							<TextAuditButton checked={[advancedKey[1]]} buttonVariant='outline-secondary'></TextAuditButton>
+							<Audit data = {auditData} ></Audit>
+						</div>
 							
 						</Modal.Body>
 						<Modal.Footer>
