@@ -9,7 +9,6 @@ import {
 	useGlobalFilter,
 	useSortBy,
 	useRowSelect,
-	useAsyncDebounce,
 } from "react-table";
 import React from "react";
 
@@ -21,7 +20,7 @@ import {
 
 // Let the table remove the filter if the string is empty
 fuzzyTextFilterFn.autoRemove = (val) => !val;
-
+// master list of students component
 export function TableMasterList({
 	columns,
 	data,
@@ -33,7 +32,13 @@ export function TableMasterList({
 	updateChecked,
 	setTranLoad
 }) {
+
+
+	// function that gets called when the user selects a row or student. 
+	// triggers the api calls in the parent component App.js
 	function enterAdvanced(row, cell) {
+
+		// this logic is so that we can display the student info on the left hand side of the transcript
 		if(cell.column.id !== "selection"){
 			const key = row.cells.map((cell) => {
 				if (cell.column.id === "student_number") {
@@ -65,15 +70,15 @@ export function TableMasterList({
 					return cell.value;
 				}
 			});
-			setTranLoad(true)
-			modalOpen();
+			setTranLoad(true)     // toggle to loading data, shows the laoding data spinner modal
+			modalOpen();  			// 	opens the modal that hold the transcript and in-app audit
 			selectRow({
 				name: name,
 				program: program,
 				campus: campus,
 				rank: rank,
 				status: status,
-			});
+			});  					// sets state for the 
 			selectKey(key);
 		
 		}
@@ -99,6 +104,8 @@ export function TableMasterList({
 		[]
 	);
 
+
+	
 	const defaultColumn = React.useMemo(
 		() => ({
 			// Let's set up our default Filter UI
@@ -133,7 +140,7 @@ export function TableMasterList({
 					{
 						id: "selection",
 						Header: ({ getToggleAllRowsSelectedProps }) => (
-							<div><CheckBox {...getToggleAllRowsSelectedProps()} /></div>
+							<div><CheckBox {...getToggleAllRowsSelectedProps()} /></div>         // check boxes on left handside of the student master list
 							
 						),
 						Cell: ({ row }) => (
@@ -174,7 +181,7 @@ export function TableMasterList({
 					{headerGroups.map((headerGroup, index) => {
 						if(index > 0){
 							return (
-				<tr  {...headerGroup.getHeaderGroupProps()}>
+						<tr  {...headerGroup.getHeaderGroupProps()}>
 							{headerGroup.headers.map((column) => (
 								<th  {...column.getHeaderProps(column.getSortByToggleProps())}>
 									{column.render("Header")}

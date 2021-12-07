@@ -1,13 +1,12 @@
-import React from "react";
+
 import {
-	filterGreaterThan,
-	NumberRangeColumnFilter,
+	
 	SelectColumnFilter,
 	compareCourseCode,
 	compareRank
 } from "./Filters";
 
-// To Do: UseMemo Columns
+//  column object used by the react table 
 export const columns = [
 	{
 		Header: " ",
@@ -33,7 +32,7 @@ export const columns = [
 			{
 				Header: "Rank",
 				accessor: "rank",
-				sortType: compareRank,
+				sortType: compareRank,         // custom sort function, param is a comparator function
 				Filter: SelectColumnFilter,
 			},
 			{
@@ -45,6 +44,8 @@ export const columns = [
 	},
 ];
 
+
+// column objects for the transcipt columns
 export const columnsTranscripts = [
 	{
 		Header: " ",
@@ -52,7 +53,7 @@ export const columnsTranscripts = [
 			{
 				Header: "Course Code",
 				accessor: "Course_Code",
-				sortType: compareCourseCode, // custom function
+				sortType: compareCourseCode, // custom sort function, param is a comparator function
 				disableFilters: true,
 			},
 			{

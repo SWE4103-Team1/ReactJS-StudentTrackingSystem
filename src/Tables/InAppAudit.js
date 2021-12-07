@@ -1,8 +1,7 @@
-import {InAppAudit} from '../makeData'
-import {Form, Button} from 'react-bootstrap'
+
 import React from 'react'
 import { AuditCSE } from "./AuditCSE";
-
+// In App audit data
 export const Audit = ({ data }) => {
 	
 
@@ -29,7 +28,7 @@ export const Audit = ({ data }) => {
 	};
 
 
-    let progress = data.progress
+    let progress = data.progress    // helper variable shorten things
    
 	return (
 		<div style={styles.Parent_Div}>

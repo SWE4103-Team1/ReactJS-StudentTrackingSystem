@@ -1,112 +1,55 @@
 import React from "react";
-import styled from "styled-components";
-
 import Counts from "./counts";
 import TextAuditButton from "./textAudits"
-// A great library for fuzzy filtering/sorting items
-
 import "./App.css";
-import { makeData, makeTranscript } from "./makeData";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import { TableMasterList } from "./Tables/MasterList";
-
 import { columns } from "./ColumnsFilters/Columns";
-import { transcriptModal } from "./Modal/TranscriptModal";
-
-import { Button, Nav } from "react-bootstrap";
-import { Modal } from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import { TableTranscript } from "./Tables/Transcript";
 import { columnsTranscripts } from "./ColumnsFilters/Columns";
 import {Audit} from './Tables/InAppAudit'
-import LoadingOverlay from 'react-loading-overlay';
-import {InAppAudit} from './makeData'
-import Loader from "react-loader-spinner";
-import axios from "axios";
+import {InAppAudit, makeData, makeTranscript} from './makeData'
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
-// async function  fetchData(advancedKey,setAuditData, setTranscriptData ) {
-// 	let getURL = window.location.hostname;
-	
-	
-// 	const TranscriptURL = ''
-// 	const AuditURL = ''
-
-// 	const trans = axios.get(TranscriptURL)
-// 	const audit = axios.get(AuditURL)
-
-// 	axios.all([trans, audit]).then(
-// 		axios.spread((...allData)=> {
-
-// 		})
-// 	)
-
-
-
-// 	let getURL = window.location.hostname;
-//     if(key.length !== 0){
-//       if(getURL === 'localhost' || getURL === '127.0.0.1'){
-      
-//         const url = "http://"+ getURL + ":8000/get_transcript/" + key[1] + "";
-
-// 		const TranscriptURL = 'http://"+ getURL + ":8000/get_transcript/" + key[1] + "'
-// 		const AuditURL = ''
-//         const response = await fetch(url);
-//         const data = await response.json();
-//         settranscriptLoading(false)
-    
-//         return setData(data);
-//       }
-//       else{
-        
-//         const url = "http://"+ getURL + "/get_transcript/" + key[1] + "";
-//         const response = await fetch(url);
-//         const data = await response.json();
-       
-//         settranscriptLoading(false)
-//         return setData(data);
-//       }
-    
-//     }
-// }
 
 
 function App() {
+	// TOP LEVEL STATES
+	// state to store the master student list data
 	const [data, setData] = React.useState([]);
-	const [TranscriptData, setTranscriptData] = React.useState([]);
-	const [showAudit, setShowAudit] = React.useState(false);
-	const [advancedKey, advancedKeySet] = React.useState([]);
-	const [transcriptLoading, settranscriptLoading] = React.useState(false)
-	const [isActive, setisActive] = React.useState(false);
-	const [auditLoading, setauditLoading] = React.useState(true)
+	const [TranscriptData, setTranscriptData] = React.useState([]);   // data state for transcript
+	const [showAudit, setShowAudit] = React.useState(false);  		// state to toggle between in-app audit and transcript
+	const [advancedKey, advancedKeySet] = React.useState([]);		// state to hold the student number of the student that is selected to view transcript 
+	const [transcriptLoading, settranscriptLoading] = React.useState(false) // state to tell us when the app is waiting for data from api 
 	const [transcriptInfo, setTranscriptInfo] = React.useState({
 		name: '',
 		program: '',
 		campus: '',
 		rank: '',
 		status: '',
-	});
-
-	// Holds a list of student numbers for the currently checked rows within the master list
+	});     // state for the student data displayed in transcript on left hand side
 	const [checkedSIDs, setCheckedSIDs] = React.useState([]);
+	const [auditData, setAuditData] = React.useState({})	// state for holding the audit data
+	const [modalShow, setModalShow] = React.useState(false);   // state to toggle whether the modal is shown or not 
+
+
 	
-	const [modalShow, setModalShow] = React.useState(false);
+	// functions to handle opening and closing the transcript / in-app audit modal
 	const handleClose = () => setModalShow(false);
 	const handleShow = () => setModalShow(true);
-	const handleShowAudit = () => setShowAudit(true);
-	const handleCloseAudit = () => setShowAudit(false);
 
 
+	// Side effect that gets called on render.
+	// fetches the master list data and sets state
 	React.useEffect(() => {
 		(async () => {
 			await makeData(setData);
 		})();
 	}, []);
 
-
-	const [auditData, setAuditData] = React.useState({})
-   
-
+	// Side effect that gets called on render and when the user selects a row or student
+	// fetches data for the in - app audit and the transcript 
     React.useEffect(() => {
 		(async () => {
 			await InAppAudit(advancedKey,setAuditData);
@@ -117,23 +60,16 @@ function App() {
 	}, [advancedKey]);
 
 
-	function handleTabs(eventKey) {
-		
-		if(eventKey === false){
-			setShowAudit(false)
-		}
-		else{
-			setShowAudit(true)
-		}
-		
-	}
 
-
-
-
+/* react functional component: This component diaplays the 
+	modal when a specific row is selected.
+	param: audit:boolean ; tells us whether the user wants to view in-app audit or the transcript
+	*/
 	function Transcript({audit}) {
 	
 		if(!audit && !transcriptLoading){
+			// what the user wants to view the transcript 
+			// the jsx returned in this function is the transcript
 			return( <>
 				
 			   <Modal
@@ -179,6 +115,8 @@ function App() {
 			   </> );
 		}
 		else if(audit ){
+			// this is shown when the user wants to view the in-app audit
+			// the jsx returned is the in-app audit 
 			return (
 			
 			
@@ -195,7 +133,7 @@ function App() {
 						<Modal.Body>
 							
 						<div style = {{boxShadow: "1px 3px 1px #9E9E9E", display: "inline-block"}}><Button  size="lg" variant='outline-secondary'>Generate Text Audit</Button>
-			
+			{/* Actual in-app audit component, stored in  InAppAudit */}
 			<Audit data = {auditData} ></Audit>
 			
 			</div>
@@ -210,6 +148,9 @@ function App() {
 
 		}
 		else{
+
+			// show loading modal
+			// this will be hidden once all the data is loaded
 			return (
 				<Modal
 						show={modalShow}
@@ -230,18 +171,12 @@ function App() {
 	}
 	return (
 		<>
-			<div className='master-container'>
-			
-			
-			
-					
-				<div className='div-table'>
-					
-					
-					
-					<Transcript audit = {showAudit}></Transcript>
-					
-					<TableMasterList
+			<div className='master-container'>			
+				<div className='div-table'>	
+				{/* Transcript / In - App audit parent component*/}				
+					<Transcript audit = {showAudit}></Transcript>    
+					{/* master student list component */}
+					<TableMasterList    
 						columns={columns}
 						data={data}
 						modalClose={handleClose}
@@ -252,22 +187,14 @@ function App() {
 						updateChecked={setCheckedSIDs}
 						setTranLoad={settranscriptLoading}
 					/>
-					{/* <Nav variant="tabs"  onSelect={(e)=>setShowAudit(e)} >
-							<Nav.Item>
-								<Nav.Link eventKey= {false}>Transcript</Nav.Link>
-							</Nav.Item>
-							<Nav.Item>
-								<Nav.Link eventKey= {true}>Audit</Nav.Link>
-							</Nav.Item>
-							
-						</Nav> */}
-					
 							
 				</div>
 				<div className='div-textAudit'>
+					{/* Text Audit Button component */}
 					<TextAuditButton checked={checkedSIDs} buttonVariant='danger'></TextAuditButton>
 				</div>
 				<div className='div-counts'>
+					{/* student counts components */}
 					<Counts></Counts>
 				</div>
 			</div>

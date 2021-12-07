@@ -4,7 +4,7 @@ import React from 'react'
 
 
 
-
+// seperate component for the CSE part of the in-app audit
 export const AuditCSE = ({CSEData}) => {
 
     let CSEDataIN = CSEData
@@ -17,7 +17,7 @@ export const AuditCSE = ({CSEData}) => {
             padding: "15px"
         }
     }
-
+// the logic below is to help format the audit simialr to what it was   
 if(CSEDataIN["CSE-HSS"].completed.courses.length != 0 || CSEDataIN["CSE-HSS"].in_progress.courses.length != 0) {
     
    

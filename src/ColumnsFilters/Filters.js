@@ -1,8 +1,19 @@
+/* file that holds all the filter components
+	and sorting components
+*/
+
+
 import React from "react";
 import { matchSorter } from "match-sorter";
+
+
+
+// compare course code function 
+// in code EMGG*1015 
+// have to trim the "ENGG" part and 
 export function compareCourseCode(rowA, rowB, id, desc) {
 	let arr_A = rowA.values[id];
-	arr_A = arr_A.split("*");
+	arr_A = arr_A.split("*");    // delimator for the scode string
 	
 	let arr_B = rowB.values[id];
 
@@ -22,32 +33,27 @@ export function compareCourseCode(rowA, rowB, id, desc) {
 	return 0;
 }
 
-
+// tudent rank function for sorting the rank properly 
+// FIR->SOP->JUN->SEN
 export function compareRank(rowA, rowB, id, desc) {
 	let arr_A = rowA.values[id];
-	
-
 	let arr_B = rowB.values[id];
-
-	
-	
-	
 	let a = 0
 	let b = 0
 
-	if(arr_A === "JUN"){
-		a = 1
-	}else if(arr_A === "SOP"){
+	if(arr_A === "SOP"){
+		a = 1 
+	}else if(arr_A === "JUN"){
 		a = 2
 	}
 	else if(arr_A === "SEN"){
 		a = 3
 	}
 
-	if(arr_B === "JUN"){
+	if(arr_B === "SOP"){
 		b = 1
 
-	}else if(arr_B === "SOP"){
+	}else if(arr_B === "JUN"){
 		b = 2
 
 	}
@@ -76,11 +82,13 @@ export function filterGreaterThan(rows, id, filterValue) {
 	});
 }
 
-// Define a default UI for filtering
+// used for the default column filter
+// param: column object
+// 
 export function DefaultColumnFilter({
 	column: { filterValue, preFilteredRows, setFilter },
 }) {
-	const count = preFilteredRows.length;
+	
 
 	return (
 		<input
@@ -93,63 +101,7 @@ export function DefaultColumnFilter({
 	);
 }
 
-// This is a custom UI for our 'between' or number range
-// filter. It uses two number boxes and filters rows to
-// ones that have values between the two
-export function NumberRangeColumnFilter({
-	column: { filterValue = [], preFilteredRows, setFilter, id },
-}) {
-	const [min, max] = React.useMemo(() => {
-		let min = preFilteredRows.length ? preFilteredRows[0].values[id] : 0;
-		let max = preFilteredRows.length ? preFilteredRows[0].values[id] : 0;
-		preFilteredRows.forEach((row) => {
-			min = Math.min(row.values[id], min);
-			max = Math.max(row.values[id], max);
-		});
-		return [min, max];
-	}, [id, preFilteredRows]);
 
-	return (
-		<div
-			style={{
-				display: "flex",
-			}}>
-			<input
-				value={filterValue[0] || ""}
-				type='number'
-				onChange={(e) => {
-					const val = e.target.value;
-					setFilter((old = []) => [
-						val ? parseInt(val, 10) : undefined,
-						old[1],
-					]);
-				}}
-				placeholder={`Min (${min})`}
-				style={{
-					width: "70px",
-					marginRight: "0.5rem",
-				}}
-			/>
-			to
-			<input
-				value={filterValue[1] || ""}
-				type='number'
-				onChange={(e) => {
-					const val = e.target.value;
-					setFilter((old = []) => [
-						old[0],
-						val ? parseInt(val, 10) : undefined,
-					]);
-				}}
-				placeholder={`Max (${max})`}
-				style={{
-					width: "70px",
-					marginLeft: "0.5rem",
-				}}
-			/>
-		</div>
-	);
-}
 
 // This is a custom filter UI for selecting
 // a unique option from a list
@@ -183,6 +135,9 @@ export function SelectColumnFilter({
 	);
 }
 
+
+// fuzzy text filtering function, allows for search for substring 
+// param: rows object, id 
 export function fuzzyTextFilterFn(rows, id, filterValue) {
 	return matchSorter(rows, filterValue, { keys: [(row) => row.values[id]] });
 }
