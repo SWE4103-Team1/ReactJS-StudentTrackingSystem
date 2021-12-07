@@ -1,6 +1,3 @@
-
-import axios from "axios";
-
 export  async function makeData(setData) {
 
   let getURL = window.location.hostname;
@@ -60,29 +57,20 @@ export  async function makeData(setData) {
   export async function InAppAudit(key, setData) {
 
     let getURL = window.location.hostname;
+
+    let url = "";
  
     if(key.length !== 0){
       if(getURL === 'localhost' || getURL === '127.0.0.1'){
-      
-        const url = "http://"+ getURL + ":8000/audit_student/" + key[1] + "";
-        
-        let response = await fetch(url)
-        response = await response.json()
-       
-        return setData(response);
+        url = "http://"+ getURL + ":8000/audit_student/" + key[1] + "";
       }
       else{
-      
-        const url = "http://"+ getURL + "/audit_student/" + key[1] + "";
-        let response = await axios.get(url)
-        let data = await response.json();
-        
-        // console.log(response.data);
-   
-        
-        return setData(data);
+        url = "http://"+ getURL + "/audit_student/" + key[1] + "";
       }
-    
-    }
 
+      let response = await fetch(url)
+      response = await response.json()
+
+      return setData(response);
+    }
 	}

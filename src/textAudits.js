@@ -3,6 +3,9 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {Button} from "react-bootstrap";
 
+import JSZip from "jszip"
+import { saveAs } from 'file-saver';
+
 import axios from "axios";
 
 import "./styles.css";
@@ -19,7 +22,7 @@ export default function TextAuditButton({checked, buttonVariant}) {
         let getURL = window.location.hostname;
         let url = ((getURL === 'localhost' || getURL === '127.0.0.1') ? 
             "http://"+ getURL + ":8000/audit_student/" + sid + "" : 
-            "http://swe4103-env.eba-irrkpdyi.us-east-2.elasticbeanstalk.com/_get_Audit/" + sid + "");
+            "http://" + getURL + "/audit_student/" + sid + "");
 
         let response = await axios.get(url);
         return response.data;
@@ -214,16 +217,6 @@ export default function TextAuditButton({checked, buttonVariant}) {
         return lines.join('');
     }
 
-    // Creates the text file using some stupid html magic <a> tags, thanks google
-    const createTxtFile = (filename, text) => {
-        const element = document.createElement("a");
-        const file = new Blob([text], {type: 'text/plain'});
-        element.href = URL.createObjectURL(file);
-        element.download = filename;
-        document.body.appendChild(element); // Required for this to work in FireFox
-        element.click();
-    }
-
     // Fires each time Generate Text Audit button is pressed
     useEffect(() => {
         if (auditLoading)
@@ -235,23 +228,25 @@ export default function TextAuditButton({checked, buttonVariant}) {
                 promiseArr.push(getAuditData(key));
             }
 
+            // Create new object for zipping
+            let zip = new JSZip();
+
             Promise.all(promiseArr).then(responses => {
                 for (const resp of responses)
                 {
                     audits[resp["target_student"]["student_number"]] = resp;
                 }
 
-                let filename = "";
-                let text = "";
                 for (const [sid, data] of Object.entries(audits))
                 {
-                    filename += sid + "-";
-                    text += parseAuditData(data);
+                    // Add audit file for sid to zip file
+                    zip.file(sid + "-audit.txt", parseAuditData(data));
                 }
 
-                filename += "audit.txt"
-
-                createTxtFile(filename, text);
+                // Save zip file
+                zip.generateAsync({type: "blob"}).then(content => {
+                    saveAs(content, "audits.zip");
+                });
 
                 setAuditLoading(false);
             });
